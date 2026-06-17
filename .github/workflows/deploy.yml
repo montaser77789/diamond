@@ -26,6 +26,8 @@ jobs:
           script_stop: true
 
           script: |
+            git config --global --add safe.directory /var/www/diamond
+
             cd /var/www/diamond
 
             git fetch origin
