@@ -27,6 +27,8 @@ jobs:
           script_stop: true
 
           script: |
+            sudo bash -c '
+
             cd /var/www/diamond
 
             git fetch origin
@@ -34,14 +36,12 @@ jobs:
 
             npm install
 
-            sudo chown -R deploy:deploy /var/www/diamond || true
-
-            find .next -type d -exec chmod 755 {} \; 2>/dev/null || true
-            find .next -type f -exec chmod 644 {} \; 2>/dev/null || true
-
             rm -rf .next
 
             npm run build
 
-            pm2 restart diamond
+            pm2 restart diamond || pm2 start npm --name diamond -- start -- -p 3001
+
             pm2 save
+
+            '
