@@ -32,11 +32,11 @@ export default function TopBar() {
         </div>
 
         <div className="flex gap-12">
-          <span className="">info@aldawalmassy.sa</span>
+          <span className="">khalidisok@yahoo.com</span>
 
-          <span>الرياض 12834 - السعودية</span>
+          <span>الرياض - السلي - مخرج 18</span>
 
-          <span dir="ltr">+966 55 876 3676</span>
+          <span dir="ltr">+966 540 212 965</span>
         </div>
       </div>
     </div>
