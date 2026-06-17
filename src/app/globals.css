@@ -1,26 +1,145 @@
 @import "tailwindcss";
 
+/* ==========================================
+   AL DAW AL MASSI DESIGN SYSTEM
+========================================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
+
+body {
+  font-family: var(--font-body);
+}
 :root {
+  /* Base */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1e293b;
+
+  /* Brand */
+  --primary: #2ea8df;
+  --primary-hover: #1a8cb9;
+  --dark-surface: #0b1329;
+
+  --secondary: #e2e8f0;
+  --secondary-hover: #cbd5e1;
+
+  /* Neutrals */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+
+  --border: #e2e8f0;
+
+  --surface: #f8fafc;
+  --surface-2: #f1f5f9;
+
+  /* Effects */
+  --shadow:
+    0 12px 40px
+    rgba(0, 0, 0, 0.08);
+
+  --radius: 24px;
 }
 
 @theme inline {
+  /* main */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* brand */
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-dark-surface: var(--dark-surface);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+
+  /* text */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+
+  /* ui */
+  --color-border: var(--border);
+
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+
+  --radius-main: var(--radius);
+
+  --shadow-main: var(--shadow);
+
+  /* fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+/* ==========================================
+   GLOBAL
+========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
+
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+ 
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  overflow-x: hidden;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--primary);
+
+  color: white;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f7f7f7;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+
+    transform: translateX(50px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateX(0);
+  }
 }
