@@ -10,24 +10,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check Secrets
-        run: |
-          echo "HOST=${{ secrets.SERVER_HOST }}"
-          echo "USER=${{ secrets.SERVER_USER }}"
-          if [ -n "${{ secrets.SERVER_SSH_KEY }}" ]; then
-            echo "SSH_KEY_EXISTS=yes"
-          else
-            echo "SSH_KEY_EXISTS=no"
-          fi
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Deploy
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
-          debug: true
+          timeout: 60s
+          command_timeout: 20m
+          script_stop: true
           script: |
-            pwd
-            whoami
+            cd /var/www/diamond
+
+            git pull origin main
+
+            npm install
+
+            rm -rf .next
+            npm run build
+
+            pm2 restart diamond
+            pm2 save
