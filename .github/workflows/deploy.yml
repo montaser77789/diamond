@@ -1,0 +1,42 @@
+name: Deploy Diamond
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            set -e
+
+            cd /var/www/diamond
+
+            echo "==> Pulling latest code..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "==> Installing dependencies..."
+            npm ci
+
+            echo "==> Building Next.js..."
+            npm run build
+
+            echo "==> Restarting PM2..."
+            pm2 restart diamond
+
+            echo "==> Saving PM2 process list..."
+            pm2 save
+
+            echo "==> Deployment completed successfully!"
