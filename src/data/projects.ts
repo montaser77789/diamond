@@ -1,3 +1,17 @@
+export type ProjectType = {
+  id: string;
+  label: string;
+  color: string;
+};
+
+export const PROJECT_TYPES: ProjectType[] = [
+  { id: "all", label: "الكل", color: "primary" },
+  { id: "government", label: "حكومية / بلدية", color: "primary" },
+  { id: "residential", label: "سكنية / تراثية", color: "amber" },
+  { id: "commercial", label: "تجارية / حضرية", color: "emerald" },
+  { id: "industrial", label: "صناعية", color: "orange" },
+];
+
 export type Project = {
   id: number;
   title: string;
@@ -7,6 +21,7 @@ export type Project = {
   location: string;
   description: string;
   scope: string[];
+  type: string;
 };
 
 export const PROJECTS: Project[] = [
@@ -23,8 +38,9 @@ export const PROJECTS: Project[] = [
       "توريد أعمدة إنارة طريقية",
       "تركيب أنظمة LED",
       "اختبار وتشغيل المشروع",
-      "التزام بالمواصفات المعتمدة",
+      "الالتزام بالمواصفات المعتمدة",
     ],
+    type: "government",
   },
   {
     id: 2,
@@ -41,6 +57,7 @@ export const PROJECTS: Project[] = [
       "تصميم متناسق مع البيئة",
       "تسليم في الموعد المحدد",
     ],
+    type: "residential",
   },
   {
     id: 3,
@@ -57,6 +74,7 @@ export const PROJECTS: Project[] = [
       "تنفيذ احترافي",
       "دعم فني مستمر",
     ],
+    type: "commercial",
   },
   {
     id: 4,
@@ -73,9 +91,19 @@ export const PROJECTS: Project[] = [
       "أنظمة تحكم ذكية",
       "صيانة ما بعد التسليم",
     ],
+    type: "industrial",
   },
 ];
 
 export function getProjectBySlug(slug: string) {
   return PROJECTS.find((project) => project.slug === slug);
+}
+
+export function getProjectsByType(type: string) {
+  if (type === "all") return PROJECTS;
+  return PROJECTS.filter((project) => project.type === type);
+}
+
+export function getProjectType(typeId: string) {
+  return PROJECT_TYPES.find((type) => type.id === typeId);
 }

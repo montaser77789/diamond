@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BsArrowUpRight, BsCheckLg } from "react-icons/bs";
-import { getProjectBySlug, PROJECTS } from "@/data/projects";
+import { getProjectBySlug, PROJECTS, PROJECT_TYPES } from "@/data/projects";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -24,6 +24,22 @@ export async function generateMetadata({ params }: Props) {
     title: `${project.title} | شركة الضوء الماسي`,
     description: project.description,
   };
+}
+
+function getTypeBadgeClass(typeId: string) {
+  const type = PROJECT_TYPES.find(t => t.id === typeId);
+  if (!type) return "bg-primary/90";
+  const colorMap: Record<string, string> = {
+    primary: "bg-primary/90",
+    amber: "bg-amber-500/90",
+    emerald: "bg-emerald-500/90",
+    orange: "bg-orange-500/90",
+  };
+  return colorMap[type.color] || "bg-primary/90";
+}
+
+function getTypeLabel(typeId: string) {
+  return PROJECT_TYPES.find(t => t.id === typeId)?.label || typeId;
 }
 
 export default async function ProjectPage({ params }: Props) {
@@ -51,8 +67,13 @@ export default async function ProjectPage({ params }: Props) {
 
           <div className="absolute inset-0 flex items-end p-6 lg:p-14">
             <div>
-              <span className="text-primary text-[16px] lg:text-[20px]">{project.year}</span>
-              <h1 className="mt-3 max-w-[900px] text-[32px] leading-[1.3] text-white lg:text-[68px]">
+              <div className="flex items-center gap-3 mb-4">
+                <span className={`inline-block px-4 py-1.5 rounded-full text-[13px] lg:text-[14px] font-medium tracking-wider uppercase text-white ${getTypeBadgeClass(project.type)}`}>
+                  {getTypeLabel(project.type)}
+                </span>
+                <span className="text-primary text-[16px] lg:text-[20px] font-medium">{project.year}</span>
+              </div>
+              <h1 className="max-w-[900px] text-[32px] leading-[1.3] text-white lg:text-[68px]">
                 {project.title}
               </h1>
               <p className="mt-4 text-[16px] text-white/85 lg:text-[20px]">{project.location}</p>
@@ -97,6 +118,14 @@ export default async function ProjectPage({ params }: Props) {
             <h3 className="text-[24px] lg:text-[30px]">معلومات المشروع</h3>
             <dl className="mt-8 space-y-6">
               <div>
+                <dt className="text-white/60">نوع المشروع</dt>
+                <dd className="mt-1 flex items-center gap-3">
+                  <span className={`inline-block px-3 py-1 rounded-full text-[13px] font-medium tracking-wider uppercase ${getTypeBadgeClass(project.type)}`}>
+                    {getTypeLabel(project.type)}
+                  </span>
+                </dd>
+              </div>
+              <div>
                 <dt className="text-white/60">سنة التنفيذ</dt>
                 <dd className="mt-1 text-[22px]">{project.year}</dd>
               </div>
@@ -130,6 +159,11 @@ export default async function ProjectPage({ params }: Props) {
                       fill
                       className="object-cover transition duration-700 group-hover:scale-105"
                     />
+                    <div className="absolute top-3 left-3">
+                      <span className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-medium tracking-wider uppercase ${getTypeBadgeClass(item.type)}`}>
+                        {getTypeLabel(item.type)}
+                      </span>
+                    </div>
                   </div>
                   <div className="p-6">
                     <span className="text-primary text-[16px]">{item.year}</span>

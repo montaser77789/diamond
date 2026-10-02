@@ -6,14 +6,28 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { BsArrowLeft, BsArrowRight, BsArrowUpRight } from "react-icons/bs";
 import { useRef } from "react";
+import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import { services } from "../data/heroData";
 
 const featuredServices = services.slice(0, 4);
 
 export default function Services() {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
+
+  const initNavigation = () => {
+    if (swiperRef.current && prevRef.current && nextRef.current) {
+      const params = swiperRef.current.params;
+      if (params.navigation && typeof params.navigation === "object") {
+        params.navigation.prevEl = prevRef.current;
+        params.navigation.nextEl = nextRef.current;
+        swiperRef.current.navigation.init();
+        swiperRef.current.navigation.update();
+      }
+    }
+  };
 
   return (
     <section className="px-3 py-8 lg:px-5 lg:py-14">
@@ -55,13 +69,10 @@ export default function Services() {
               modules={[Navigation]}
               spaceBetween={16}
               slidesPerView={1.05}
+              navigation={true}
               onInit={(swiper) => {
-                // @ts-expect-error swiper navigation refs
-                swiper.params.navigation.prevEl = prevRef.current;
-                // @ts-expect-error swiper navigation refs
-                swiper.params.navigation.nextEl = nextRef.current;
-                swiper.navigation.init();
-                swiper.navigation.update();
+                swiperRef.current = swiper;
+                initNavigation();
               }}
               breakpoints={{
                 640: { slidesPerView: 1.2, spaceBetween: 20 },
